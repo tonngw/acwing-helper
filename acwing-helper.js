@@ -87,7 +87,7 @@
 
 	// 添加生成题解按钮
 	var generateSolutionBtn = document.createElement("button"); // 创建一个input对象（提示框按钮）
-	generateSolutionBtn.id = "copySolutionBtn";
+	generateSolutionBtn.id = "generateSolutionBtn";
 	generateSolutionBtn.textContent = "生成";
 	generateSolutionBtn.style.width = "50px";
 	generateSolutionBtn.style.height = "30px";
@@ -96,11 +96,11 @@
 	var y = document.getElementsByClassName("problem-content-sub-btn")[3];
 	y.appendChild(generateSolutionBtn);
 	
-	// 监听键盘按键，为按钮绑定快捷键
+	// 监听键盘按键，为功能绑定快捷键
 	unsafeWindow.addEventListener("keydown", (evt) => {
 		// console.log('evt', evt);
 		if (evt.altKey) {
-			// Alt + C 生成当前题目题解模板
+			// Alt + T 复制题目
 			if (evt.keyCode == 84) {
 				copy();
 			}
@@ -108,7 +108,7 @@
 			if (evt.keyCode == 83) {
 				$("[name='switchBtn']").click();
 			}
-			// Alt + T 复制题目
+			// Alt + C 生成当前题目题解模板
 			if (evt.keyCode == 67) {
 				generateSolution();
 			}
@@ -120,7 +120,7 @@
 	GM_registerMenuCommand("切换页面风格", function(){$("[name='switchBtn']").click()});
 	GM_registerMenuCommand("生成当前题目的题解模板，并存入剪切板", generateSolution);
 
-	// 为复制按钮绑定按键点击功能
+	// 为复制按钮绑定点击功能
 	copyBtn.onclick = function (e) {
 		e.preventDefault();
 		copy();
@@ -209,7 +209,7 @@
 		var problemDesc = content;
 		var splitLine = "\n---\n";
 		var algorithmConst = "### 算法\n"
-		var specificAlgorithmConst = "##### (暴力枚举)  $O(n^2)$\n";
+		var specificAlgorithmConst = "#### (暴力枚举)  $O(n^2)$\n";
 		var solution = "\nwrite here...\n"
 		var timeComplexityConst = "#### 时间复杂度";
 		var timeComplexity = "\nwrite here...\n"
