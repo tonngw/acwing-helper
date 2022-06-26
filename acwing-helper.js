@@ -1,10 +1,12 @@
 // ==UserScript==
 // @name         acwing-helper
 // @namespace    https://github.com/tonngw
-// @version      1.0.0
-// @description  AcWing 助手，学算法就上 AcWing！| 题目复制 | 生成题解模板 | 切换页面风格 (AcWing <-> LeetCode) | 复制代码 
+// @version      1.1.2
+// @description  AcWing 助手，学算法就上 AcWing！| 题目复制 | 生成题解模板 | 切换页面风格 (AcWing <-> LeetCode) | 复制代码 | 题目直接跳转
 // @author       tonngw
 // @match        https://www.acwing.com/problem/content/*/
+// @match        https://www.acwing.com/activity/content/*/
+// @match        https://www.acwing.com/activity/content/punch_the_clock/*/
 // @match        https://www.acwing.com/activity/content/code/content/*/
 // @exclude		   https://www.acwing.com/problem/content/submission/*/
 // @exclude		   https://www.acwing.com/problem/content/discussion/*/
@@ -14,6 +16,7 @@
 // @require      https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js
 // @require      https://unpkg.com/sweetalert/dist/sweetalert.min.js
 // @require      https://unpkg.com/turndown/dist/turndown.js
+// @require      https://unpkg.com/turndown-plugin-gfm/dist/turndown-plugin-gfm.js
 // @require      https://cdn.bootcdn.net/ajax/libs/bootstrap-switch/4.0.0-alpha.1/js/bootstrap-switch.min.js
 // @grant        GM_registerMenuCommand
 // @grant        GM_setClipboard
@@ -25,8 +28,12 @@
 
 	$("head").append($(`<link href="https://cdn.bootcdn.net/ajax/libs/bootstrap-switch/4.0.0-alpha.1/css/bootstrap-switch.min.css" rel="stylesheet">`));
 
+	// 使用 turndown-plugin-gfm 修复 <table> 标签解析错误，https://github.com/mixmark-io/turndown-plugin-gfm
+	var gfm = turndownPluginGfm.gfm;
 	// 初始化 html to markdown 转换工具
 	var turndownService = new TurndownService();
+	turndownService.use(gfm);
+
 	const window = unsafeWindow;
 	const description = ".row";
 	var content = "";
@@ -35,21 +42,94 @@
 	var url = window.location.href;
 	if (url.includes("code")) {
 		// 插入复制代码按钮，并设置位置
-		$(".hljs").children('code').children(':first-child').before('<button id="copyCodeBtn" class="btn default"><span class="glyphicon glyphicon-file"></span></button>');
-		$("#copyCodeBtn").css("position", "absolute");
-		$("#copyCodeBtn").css("top", "10px");
-		$("#copyCodeBtn").css("right", "10px");
+        $(".hljs").each(function() {
+              $(this).before(
+                "<button class='copyCodeBtn' class='btn default'><span class='glyphicon glyphicon-file'></span></button>"
+              );
+          });
+
+		// $(".copyCodeBtn").css("position", "absolute");
+		// $(".copyCodeBtn").css("top", "10px");
+		// $(".copyCodeBtn").css("right", "10px");
 		// 去除按钮默认样式
-		$("#copyCodeBtn").css("border", "none");
-		$("#copyCodeBtn").css("background-color", "transparent");
-		$("#copyCodeBtn").css("outline", "none");
+		$(".copyCodeBtn").css("border", "none");
+		$(".copyCodeBtn").css("background-color", "transparent");
+		$(".copyCodeBtn").css("outline", "none");
+
+        turndownService.addRule('strikethrough', {
+                filter: ['pre'],
+                replacement: function (content) {
+                    return '' + content.trim() + ""
+                }
+            });
 		// 为按钮绑定点击事件
-		copyCodeBtn.onclick = function (e) {
-			e.preventDefault();
-			copyCode();
-		};
+		$(".copyCodeBtn").click(function() {
+            let target = $(this).next();
+            // console.log($(target).html());
+            target.markdown = turndownService.turndown($(target)[0].outerHTML);
+            GM_setClipboard(target.markdown);
+            $(this).text("已复制到剪贴板");
+          });
 		return;
 	}
+
+	// 拦截带有 ?v 的路径打开题目的视频列表页面
+	if (url.includes("??")) {
+		alert(url);
+		// alert($(".label-info").get(0).href);
+		location.href = $(".label-info").get(0).href;
+		return;
+	}
+
+	// 拦截带有 ? 的路径直接打开题目
+	if (url.includes("?")) {
+		// alert(url);
+		// alert($(".label-info").get(0).href);
+		location.href = $(".label-info").get(0).href;
+		return;
+	}
+
+	// 在题目内容页面添加在当前页面打开题目按钮
+	if (url.includes("activity/content/problem/content")) {
+		var gotoHref = $(".label-info").get(0).href;
+		// console.log(gotoHref);
+		var gotoA = '&nbsp;&nbsp;&nbsp;&nbsp;<a href=' + gotoHref + ' title="跳转" one-link-mark="yes"><span class="glyphicon glyphicon-share-alt"></span></a></a>';
+		$(".label-info").after(gotoA);
+		return;
+	}
+
+	// 获取所有的打卡题目，并添加直达题目按钮
+	if (url.includes("punch_the_clock") || url.includes("activity")) {
+		$(".punch-line").each(function () {
+			var gotoHref = $(this).children("a").get(0).href + '?';
+			// console.log(gotoHref);
+			var gotoA = '<a href=' + gotoHref + ' title="跳转" target="_blank" one-link-mark="yes"><span class="glyphicon glyphicon-share-alt"></span></a></a>';
+			$(this).append(gotoA);
+			
+			// 直接跳转视频讲解
+			var gotoVideoHref = $(this).children("a").get(0).href + '??';
+			// console.log(gotoHref);
+			var gotoVideoA = '<a href=' + gotoVideoHref + ' title="跳转" target="_blank" one-link-mark="yes"><span class="glyphicon glyphicon-share-alt"></span></a></a>';
+			$(this).append(gotoVideoA);
+		});
+		return;
+	}
+
+	/*if (url.includes("punch_the_clock") || url.includes("activity")) {
+		if (url.includes("31") || url.includes("1150") || url.includes("72")
+			|| url.includes("57") || url.includes("1687") || url.includes("22") || url.includes("5"))
+			return;
+		$(".punch-line").each(function () {
+			var gotoHref = $(this).children().children("span").text();
+			var endPos = gotoHref.indexOf('.');
+			var titleNo = Number(gotoHref.slice(7, endPos)) + 2;
+			gotoHref = 'https://www.acwing.com/problem/content/' + titleNo;
+			console.log(titleNo);
+			var gotoA = '<a href=' + gotoHref + ' title="跳转" target="_blank" one-link-mark="yes"><span class="glyphicon glyphicon-share-alt"></span></a></a>';
+			$(this).append(gotoA);
+		});
+		return;
+	}*/
 
 	// 添加复制按钮
 	console.log("acwing helper...");
@@ -95,7 +175,7 @@
 
 	var y = document.getElementsByClassName("problem-content-sub-btn")[3];
 	y.appendChild(generateSolutionBtn);
-	
+
 	// 监听键盘按键，为功能绑定快捷键
 	unsafeWindow.addEventListener("keydown", (evt) => {
 		// console.log('evt', evt);
@@ -131,7 +211,7 @@
 		e.preventDefault();
 		generateSolution();
 	};
-	
+
 	// 题目复制功能实现
 	function copy() {
 		copyImpl();
@@ -174,7 +254,7 @@
 		$("#right").append($("#run-code-status-block"));
 	}
 
-	// 复制代码功能实现
+	// @Deprecated 复制代码功能实现 
 	function copyCode() {
 		turndownService.addRule('pre', {
 			filter: 'pre',
@@ -182,9 +262,9 @@
 			  return "\n" + content.trim() + "\n";
 			}
 		  });
-		
+
 		let target = $("div[data-tab='preview-tab-content']");
-		// console.log(target);
+		console.log(target.html());
 		target.markdown = turndownService.turndown($(target).html());
 		GM_setClipboard(target.markdown);
 		swal({
@@ -207,17 +287,17 @@
 		var problemDescConst = "### 题目描述\n";
 		copyImpl();
 		var problemDesc = content;
-		var splitLine = "\n---\n";
+		var splitLine = "\n\n---\n";
 		var algorithmConst = "### 算法\n"
-		var specificAlgorithmConst = "#### (暴力枚举)  $O(n^2)$\n";
-		var solution = "\nwrite here...\n"
+		var specificAlgorithmConst = "#### (暴力枚举)  $O(n^2)$";
+		var solution = "\n\nwrite here...\n\n"
 		var timeComplexityConst = "#### 时间复杂度";
-		var timeComplexity = "\nwrite here...\n"
+		var timeComplexity = "\n\nwrite here...\n\n"
 		var spaceComplexityConst = "#### 空间复杂度";
-		var spaceComplexity = "\nwrite here...\n";
+		var spaceComplexity = "\n\nwrite here...\n\n";
 		var codeConst = "#### C++ 代码\n";
-		var code = "```\n" + "my code...\n" + "```\n";
-		solutionTemplate = problemDescConst + problemDesc + splitLine + algorithmConst + specificAlgorithmConst + 
+		var code = "```\n" + "my code...\n" + "```";
+		solutionTemplate = problemDescConst + problemDesc + splitLine + algorithmConst + specificAlgorithmConst +
 			solution + timeComplexityConst + timeComplexity + spaceComplexityConst + spaceComplexity + codeConst + code;
 		GM_setClipboard(solutionTemplate);
 	}
