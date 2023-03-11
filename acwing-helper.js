@@ -1,13 +1,16 @@
 // ==UserScript==
 // @name         acwing-helper
 // @namespace    https://github.com/tonngw
-// @version      1.1.2
-// @description  AcWing 助手，学算法就上 AcWing！| 题目复制 | 生成题解模板 | 切换页面风格 (AcWing <-> LeetCode) | 复制代码 | 题目直接跳转
+// @version      1.1.5
+// @description  AcWing 助手，学算法就上 AcWing！| 题目复制 | 生成题解模板 | 切换页面风格 (AcWing <-> LeetCode) | 复制代码 | 题目直接跳转 | 一键填写样例
 // @author       tonngw
 // @match        https://www.acwing.com/problem/content/*/
 // @match        https://www.acwing.com/activity/content/*/
 // @match        https://www.acwing.com/activity/content/punch_the_clock/*/
 // @match        https://www.acwing.com/activity/content/code/content/*/
+// @match        https://www.acwing.com/solution/*/
+// @match        https://www.acwing.com/blog/*/
+// @match		 https://www.acwing.com/community/*/
 // @exclude		   https://www.acwing.com/problem/content/submission/*/
 // @exclude		   https://www.acwing.com/problem/content/discussion/*/
 // @exclude		   https://www.acwing.com/problem/content/solution/*/
@@ -20,6 +23,7 @@
 // @require      https://cdn.bootcdn.net/ajax/libs/bootstrap-switch/4.0.0-alpha.1/js/bootstrap-switch.min.js
 // @grant        GM_registerMenuCommand
 // @grant        GM_setClipboard
+// @grant        GM_addStyle
 // @license 	 MIT
 // ==/UserScript==
 
@@ -38,15 +42,15 @@
 	const description = ".row";
 	var content = "";
 
-	// 判断路径中是否包含 code，代码复制功能只在 */code/* 下生效
+	// 判断路径中是否包含 code, solution, blog, community，代码复制功能只在指定路径下下生效
 	var url = window.location.href;
-	if (url.includes("code")) {
+	if (url.includes("code") || url.includes("solution") || url.includes("blog") || url.includes("community")) {
 		// 插入复制代码按钮，并设置位置
         $(".hljs").each(function() {
-              $(this).before(
-                "<button class='copyCodeBtn' class='btn default'><span class='glyphicon glyphicon-file'></span></button>"
-              );
-          });
+			$(this).before(
+			  "<button class='copyCodeBtn' class='btn default'><span class='glyphicon glyphicon-file'></span></button>"
+			);
+		});
 
 		// $(".copyCodeBtn").css("position", "absolute");
 		// $(".copyCodeBtn").css("top", "10px");
@@ -70,14 +74,6 @@
             GM_setClipboard(target.markdown);
             $(this).text("已复制到剪贴板");
           });
-		return;
-	}
-
-	// 拦截带有 ?v 的路径打开题目的视频列表页面
-	if (url.includes("??")) {
-		alert(url);
-		// alert($(".label-info").get(0).href);
-		location.href = $(".label-info").get(0).href;
 		return;
 	}
 
@@ -105,31 +101,68 @@
 			// console.log(gotoHref);
 			var gotoA = '<a href=' + gotoHref + ' title="跳转" target="_blank" one-link-mark="yes"><span class="glyphicon glyphicon-share-alt"></span></a></a>';
 			$(this).append(gotoA);
-			
-			// 直接跳转视频讲解
-			var gotoVideoHref = $(this).children("a").get(0).href + '??';
-			// console.log(gotoHref);
-			var gotoVideoA = '<a href=' + gotoVideoHref + ' title="跳转" target="_blank" one-link-mark="yes"><span class="glyphicon glyphicon-share-alt"></span></a></a>';
-			$(this).append(gotoVideoA);
 		});
 		return;
 	}
 
-	/*if (url.includes("punch_the_clock") || url.includes("activity")) {
-		if (url.includes("31") || url.includes("1150") || url.includes("72")
-			|| url.includes("57") || url.includes("1687") || url.includes("22") || url.includes("5"))
-			return;
-		$(".punch-line").each(function () {
-			var gotoHref = $(this).children().children("span").text();
-			var endPos = gotoHref.indexOf('.');
-			var titleNo = Number(gotoHref.slice(7, endPos)) + 2;
-			gotoHref = 'https://www.acwing.com/problem/content/' + titleNo;
-			console.log(titleNo);
-			var gotoA = '<a href=' + gotoHref + ' title="跳转" target="_blank" one-link-mark="yes"><span class="glyphicon glyphicon-share-alt"></span></a></a>';
-			$(this).append(gotoA);
+	/* 一键填写样例功能 start */
+	GM_addStyle(`
+        .fillSmapleBtn {
+            background-color: #5cb85c; /* 设置按钮背景颜色 */
+			border: none; /* 去除边框 */
+			color: white; /* 设置文字颜色 */
+			text-align: center; /* 文字居中 */
+			text-decoration: none; /* 去除下划线 */
+			display: inline-block; /* 将按钮显示为行内元素 */
+			font-size: 13px; /* 设置字体大小 */
+			cursor: pointer; /* 鼠标悬停样式 */
+			border-radius: 4px; /* 圆角设置 */
+			transition-duration: 0.4s; /* 过渡动画时间 */
+        }
+        .fillSmapleBtn:hover {
+			background-color: #3e8e41; /* 设置鼠标悬停时的背景颜色 */
+			text: 填入样例;
+		}
+		.fillSmapleBtn:hover::after {
+			content: " 填入样例"; /* 悬停时显示的文本 */
+		}
+    `)
+
+	// 获取元素的数量
+	var sz = $(".hljs").length;
+	// 插入填入样例按钮，并设置位置
+	$(".hljs").each(function(index) {
+		// console.log(index);
+		if (index == sz - 4 || sz - 5 == 0) return false;
+		if (index % 2 == 1) return true;
+		  $(this).before(
+			"<button class='fillSmapleBtn'><span class='glyphicon glyphicon-arrow-down'></span></button>"
+		  );
+	  });
+
+	turndownService.addRule('strikethrough', {
+			filter: ['pre'],
+			replacement: function (content) {
+				return '' + content.trim() + ""
+			}
 		});
-		return;
-	}*/
+
+	// 为填入样例按钮绑定点击事件
+	$(".fillSmapleBtn").click(function() {
+		let target = $(this).next();
+		target.markdown = turndownService.turndown($(target)[0].outerHTML);
+		GM_setClipboard(target.markdown);
+		// $(this).text("已复制到剪贴板");
+		$("#run-code-stdin").val(target.markdown);
+		// 当页面风格为 vertical 时才生效
+		if (page_style == "vertical") {
+			// 页面滑动到调试按钮位置
+			$('html, body').animate({
+				scrollTop: $("#submit_code_btn").offset().top
+			}, 500);
+		}
+	  });
+	/* 一键填写样例功能 end */
 
 	// 添加复制按钮
 	console.log("acwing helper...");
@@ -144,6 +177,8 @@
 	// 在浏览器控制台可以查看所有函数，ctrl+shift+I 调出控制台，在 Console 窗口进行实验测试
 	x.appendChild(copyBtn);
 
+
+	var page_style = "vertical";
 	// 添加切换按钮
 	$("#open_ac_saber_btn").after('<input name="switchBtn" type="checkbox" checked>');
 	// name 值和 input 标签的 name 值一样
@@ -157,7 +192,9 @@
 		onSwitchChange : function(event, state) {
 			if (state == true){
 				setTimeout(() => window.location.reload(), 100);
+				page_style = "vertical";
 			} else {
+				page_style = "horizontal";
 				switchPageStyle();
 			}
 		}
@@ -192,6 +229,22 @@
 			if (evt.keyCode == 67) {
 				generateSolution();
 			}
+		}
+		// F9 调试代码
+		if (evt.keyCode == 120) {
+			debugCode();
+		}
+		// F10 提交代码
+		if (evt.keyCode == 121) {
+			submitCode();
+		}
+
+        if (evt.keyCode == 119) {
+			win = window.open();  //打开新的空白窗口
+win.document.write ("<h1>这是新打开的窗口</h1>");  //在新窗口中输出提示信息
+win.focus ();  //让原窗口获取焦点
+win.opener.document.write ("<h1>这是原来窗口</h1>");  //在原窗口中输出提示信息
+console.log(win.opener == window);  //检测window.opener属性值
 		}
 	});
 
@@ -254,7 +307,7 @@
 		$("#right").append($("#run-code-status-block"));
 	}
 
-	// @Deprecated 复制代码功能实现 
+	// @Deprecated 复制代码功能实现
 	function copyCode() {
 		turndownService.addRule('pre', {
 			filter: 'pre',
@@ -300,6 +353,17 @@
 		solutionTemplate = problemDescConst + problemDesc + splitLine + algorithmConst + specificAlgorithmConst +
 			solution + timeComplexityConst + timeComplexity + spaceComplexityConst + spaceComplexity + codeConst + code;
 		GM_setClipboard(solutionTemplate);
+	}
+
+	// 调试代码
+	function debugCode() {
+		$("#run_code_btn").click();
+
+	}
+
+	// 提交代码
+	function submitCode() {
+		$("#submit_code_btn").click();
 	}
 
 	/**
