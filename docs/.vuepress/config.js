@@ -1,7 +1,7 @@
 module.exports = {
     title: 'AcWing-Helper',
     description: 'AcWing 刷题助手',
-    base: '/acwing-helper/',
+    base: '/',
     themeConfig: {
         logo: '/assets/img/logo.png',
         nav: require('./nav/zh'),
