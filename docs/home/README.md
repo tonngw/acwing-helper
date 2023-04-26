@@ -52,10 +52,10 @@
 
 为四个常用功能绑定了快捷键
 
-- 复制题目描述 - `Alt + T(timu)`
-- 生成题解模板 - `Alt + C(copy)`
-- 切换页面风格 - `Alt + S(split)`
-- 快速调试代码 - `F9` 调试，`F10` 提交
+- 功能 1 - `Alt + T(timu)` | `Option + T` (Mac)
+- 功能 2 - `Alt + C(copy)` | `Option + C` (Mac)
+- 功能 3 - `Alt + S(split)` | `Option + S` (Mac)
+- 功能 7 - `F9` 调试，`F10` 提交
 
 大家可以自行在源代码中修改快捷键
 
