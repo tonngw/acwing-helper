@@ -1,6 +1,21 @@
 module.exports = {
     title: 'AcWing-Helper',
     description: 'AcWing 刷题助手',
+    head: [
+        [
+          'script',
+          {},
+          `
+            var _hmt = _hmt || [];
+            (function() {
+              var hm = document.createElement("script");
+              hm.src = "https://hm.baidu.com/hm.js?97467f5290c16fc06728bce3a68e5a83";
+              var s = document.getElementsByTagName("script")[0];
+              s.parentNode.insertBefore(hm, s);
+            })();
+          `
+        ]
+      ],
     themeConfig: {
         logo: '/assets/img/logo.png',
         nav: require('./nav/zh'),
