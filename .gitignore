@@ -5,6 +5,7 @@
 **/.cache/
 **/.temp/
 # dist/
+docs/.vuepress/dist/
 packages/*/lib/
 
 # Editor directories and files
