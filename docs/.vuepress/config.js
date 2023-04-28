@@ -22,7 +22,7 @@ module.exports = {
         sidebar: require('./sidebar/zh'),
         displayAllHeaders: true,
         sidebarDepth: 5,
-        lastUpdated: 'Last Updated',
+        lastUpdated: '上次更新',
 
         // 默认值是 true 。设置为 false 来禁用所有页面的 下一篇 链接
         nextLinks: true,
@@ -45,7 +45,7 @@ module.exports = {
         // 默认是 false, 设置为 true 来启用
         editLinks: true,
         // 默认为 "Edit this page"
-        editLinkText: '帮助我们改善此页面！',
+        editLinkText: '完善此页面',
 
         smoothScroll: true
     },
@@ -53,4 +53,6 @@ module.exports = {
     markdown: {
         lineNumbers: true
     },
+    evergreen: true,
+    plugins: ['@vuepress/last-updated']
 }
