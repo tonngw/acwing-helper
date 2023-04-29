@@ -24,6 +24,7 @@ module.exports = {
         displayAllHeaders: true,
         sidebarDepth: 5,
         lastUpdated: '上次更新',
+        
 
         // 默认值是 true 。设置为 false 来禁用所有页面的 下一篇 链接
         nextLinks: true,
