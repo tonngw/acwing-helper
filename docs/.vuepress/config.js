@@ -1,6 +1,7 @@
 module.exports = {
     title: 'AcWing-Helper',
     description: 'AcWing 刷题助手',
+    dest: './dist',
     head: [
         [
           'script',
