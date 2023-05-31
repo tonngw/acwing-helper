@@ -6,4 +6,4 @@
 
 插件安装地址：[这里](https://greasyfork.org/zh-CN/scripts/444381-acwing-helper)
 
-~~兄弟插件 `LeetCode-Helper` 安装地址：[这里](https://greasyfork.org/zh-CN/scripts/444408-leetcode-helper)~~
+兄弟插件 `LeetCode-Helper` 安装地址：[这里](https://greasyfork.org/zh-CN/scripts/444408-leetcode-helper)
