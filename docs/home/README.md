@@ -9,23 +9,18 @@
 ## 功能列表
 
 1. 复制题目描述，并存入剪切板
-
 2. 复制题目描述生成当前题目的题解模板，并存入剪切板
    大多数情况下一道题目只会写一种做法，这里提供了一套简洁的模板，模板来自 `AcWing`。
-
 3. 切换页面风格，`AcWing <-> LeetCode`，点击「挑战模式」旁边的 「Right」按钮即可切换为左右模式，「Bottom」按钮切换为上下模式。
-
 4. 复制代码（目前只支持 `*/code/*` 目录下的代码，即从打卡页面点击题目查看相关代码）
- 
 5. 活动打卡页面直接跳转到题目页面（支持所有活动）
-
 6. 在题目内容页面内打开题目
-
 7. 快捷键快速调试代码
-
 8. 在题目页面添加「一键填入样例」按钮方便调试，点击后样例便会自动填入到输入框中，同时页面滑动到调试位置，此时可以手动点击调试按钮或者配合我们的快捷键进行快速调试。
-
 9. LeetCode 题目一键跳转 AcWing LeetCode 究极班题目资源页面（支持**中文版**和**国际版**） 「前提：**报名过 LeetCode 究极班的同学才能正常使用！**」
+10. 添加功能开关（目前支持「是否记住页面风格（AcWing | LeetCode）」、「是否在题目页面隐藏桌面文件夹」）
+11. 首页添加题目搜索和随机一题
+12. 生成页面内容导航 TOC（支持题解、分享页面等）**这个功能还是很方便的！**
 
 ## AcWing-Helper 工作流
 
@@ -67,11 +62,15 @@
 
 右键 - `Tampermonkey`，可以看到 `acwing-helper` 提供的功能。
 
+> 图片已过期
+
 ![image-20220503103634672.png](https://cdn.acwing.com/media/article/image/2022/05/03/52520_89175c3bca-image-20220503103634672.png) 
 
 ### 插件栏
 
 点击油猴插件，可以看到 `acwing-helper` 提供的功能。
+
+> 图片已过期
 
 ![image-20220503104645827.png](https://cdn.acwing.com/media/article/image/2022/05/03/52520_9048be6fca-image-20220503104645827.png) 
 
@@ -94,6 +93,7 @@
 - [https://github.com/ZimoLoveShuang/leetcode-helper](https://github.com/ZimoLoveShuang/leetcode-helper) 
 - [https://greasyfork.org/zh-CN/scripts/441750-acwing-content-to-markdown](https://greasyfork.org/zh-CN/scripts/441750-acwing-content-to-markdown)
 - [https://greasyfork.org/zh-CN/scripts/447992-leetcode2acwing](https://greasyfork.org/zh-CN/scripts/447992-leetcode2acwing)
+- [https://greasyfork.org/zh-CN/scripts/450890-leetcoderating-%E6%98%BE%E7%A4%BA%E5%8A%9B%E6%89%A3%E5%91%A8%E8%B5%9B%E9%9A%BE%E5%BA%A6%E5%88%86](https://greasyfork.org/zh-CN/scripts/450890-leetcoderating-%E6%98%BE%E7%A4%BA%E5%8A%9B%E6%89%A3%E5%91%A8%E8%B5%9B%E9%9A%BE%E5%BA%A6%E5%88%86)
 
 ### 贡献者名单
 

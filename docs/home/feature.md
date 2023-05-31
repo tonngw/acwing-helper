@@ -23,7 +23,7 @@
 点击代码块左上角的「复制图标」复制代码，支持多个页面。
 
   ![snipaste20220620_185952.png](https://cdn.acwing.com/media/article/image/2022/06/20/52520_468f584df0-snipaste20220620_185952.png) 
-  
+
 ## 题目跳转
 
 在每道题目后添加「蓝色跳转按钮」，直接打开题目。
@@ -36,7 +36,7 @@
 点击原题链接后面的「蓝色按钮」在当前页打开题目
 
   ![image-20220528152320934.png](https://cdn.acwing.com/media/article/image/2022/05/28/52520_2321b160de-image-20220528152320934.png) 
-  
+
 ## 快速调试代码
 
 在题目页面 `F9` 调试代码，`F10` 提交代码
@@ -62,3 +62,19 @@
 （3）AcWing 题目资源页面
 
 ![LeetCode究极班资源页面.jpg](https://cdn.acwing.com/media/article/image/2023/04/15/52520_992354addb-LeetCode究极班资源页面.jpg)
+
+## 添加功能开关
+
+点击开启后浏览器会记住你的选择
+
+![添加功能开关.jpg](https://cdn.acwing.com/media/article/image/2023/05/31/52520_2803d2b5ff-添加功能开关.jpg)
+
+## 首页添加题目搜索和随机一题
+
+![首页添加题目搜索和随机一题.jpg](https://cdn.acwing.com/media/article/image/2023/05/31/52520_2df8e25cff-首页添加题目搜索和随机一题.jpg)
+
+##  生成页面内容导航 TOC
+
+生成页面内容导航，支持题解、分享页面等
+
+![添加内容导航.jpg](https://cdn.acwing.com/media/article/image/2023/05/31/52520_34273769ff-添加内容导航.jpg) 
