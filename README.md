@@ -22,6 +22,20 @@
 
 ---
 
+### 2024.04.27
+
+> 日常拖更...
+
+新功能：
+
+- 右下角添加 Ac Terminal 图标，随时随地快速打开终端。
+![image-20240427205403811.png](https://cdn.acwing.com/media/article/image/2024/04/27/52520_5cc1bfc804-image-20240427205403811.png) 
+
+功能优化：
+
+- 优化 Leetcode 题目页面的上一题下一题无法更新 AcWing 跳转链接。
+![image-20240427205118850.png](https://cdn.acwing.com/media/article/image/2024/04/27/52520_568ee98e04-image-20240427205118850.png) 
+
 ### 2024.03.03
 
 > emmm，好久没更新了，工作之后刷题比较少了，但还是会上来看看，看到 AcWing 功能也越来越完善了，还是挺开心的hh。
